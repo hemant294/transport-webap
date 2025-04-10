@@ -1,9 +1,14 @@
 import React from 'react';
 import heroImg from "../assets/ThanitJuly_42.jpg";
 import TransportOptions from '../components/TransPortOptions';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Hero = () => {
-    return (
+    const user = useSelector((state) => state.auth.user);
+    console.log('Redux full state:', useSelector((state) => state));
+
+    console.log(user)
+      return (
         <>
             <section className="bg-gray-100 min-h-[90vh] flex items-center">
                 <div className="container mx-auto px-6 py-6 grid grid-cols-1 md:grid-cols-12 gap-12 items-center">

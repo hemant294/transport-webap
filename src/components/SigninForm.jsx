@@ -1,14 +1,20 @@
-// SigninForm.jsx
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../redux/action/authActions';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const SigninForm = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     rememberMe: false
   });
-  
+
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
@@ -19,16 +25,42 @@ const SigninForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission - validation, API calls, etc.
-    console.log('Form submitted:', formData);
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/login', {
+        email: formData.email,
+        password: formData.password
+      });
+
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+
+      const userRes = await axios.get('http://localhost:5000/api/auth/me', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const userData = userRes.data;
+      localStorage.setItem('user', JSON.stringify(userData)); // Save user
+
+      // ✅ Dispatch to Redux
+      dispatch(setUser(userData, token));
+
+      // ✅ Navigate
+      navigate('/hero');
+
+    } catch (error) {
+      console.error('Login error:', error.response?.data || error.message);
+    }
   };
 
   return (
     <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Sign In</h2>
-      
+
       <form onSubmit={handleSubmit}>
         {/* Email Field */}
         <div className="mb-4">
@@ -51,7 +83,7 @@ const SigninForm = () => {
             />
           </div>
         </div>
-        
+
         {/* Password Field */}
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
@@ -80,7 +112,7 @@ const SigninForm = () => {
             </button>
           </div>
         </div>
-        
+
         {/* Remember Me & Forgot Password */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
@@ -102,7 +134,7 @@ const SigninForm = () => {
             </a>
           </div>
         </div>
-        
+
         {/* Submit Button */}
         <button
           type="submit"
@@ -111,7 +143,7 @@ const SigninForm = () => {
           Sign In
         </button>
       </form>
-      
+
       {/* Sign up link */}
       <div className="mt-4 text-center">
         <p className="text-sm text-gray-600">

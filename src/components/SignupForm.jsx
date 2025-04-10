@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { MdLocalPhone } from "react-icons/md";
+import axios from 'axios';
 
 const SignupForm = () => {
     const [formData, setFormData] = useState({
@@ -21,11 +22,20 @@ const SignupForm = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle form submission - validation, API calls, etc.
-        console.log('Form submitted:', formData);
+
+        try {
+            const response = await axios.post('http://localhost:5000/api/auth/signup', formData);
+
+            console.log('Signup successful:', response.data);
+            // You can redirect or show a success message here
+        } catch (error) {
+            console.error('Signup error:', error.response?.data || error.message);
+            // You can show an error message to the user here
+        }
     };
+
 
     return (
         <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
