@@ -10,7 +10,6 @@ const transportReducer = (state = initialState, action) => {
         case VEHICLE_TYPE:
             return {
                 ...state,
-                vehicleId: action.payload.id,
                 transportDetail: action.payload.transportDetail
             };
 

@@ -6,8 +6,9 @@ const Driver = () => {
     const riderInfo = useSelector((state) => state?.driver?.driverInfo);
     const cancelInfo = useSelector((state) => state?.booking?.cancelInfo);
     const { iscancelBooking, isprocedPayment, isDefaultColor } = useSelector((state) => state.booking);
+    console.log(iscancelBooking, isprocedPayment, isDefaultColor)
     return (
-        <div className="relative py-3 w-full bg-gray-300 mt-8 min-h-screen">
+        <div className="relative py-3 w-full mt-8 min-h-screen">
             <div className="relative py-3 sm:max-w-xl sm:mx-auto mt-8 ">
 
             <div className={`absolute inset-0 

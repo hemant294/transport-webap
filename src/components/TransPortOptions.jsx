@@ -72,7 +72,7 @@ const TransportOptions = () => {
     }, []);
 
     const handleClick = (opt) => {
-        dispatch(setVehicle(opt.id, opt));
+        dispatch(setVehicle(opt));
         navigate(`/booking/${opt.title}`);
     }
 
