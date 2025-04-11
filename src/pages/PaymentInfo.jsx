@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaStar, FaRegStar, FaCircle } from 'react-icons/fa';
 import { MdLocationOn } from 'react-icons/md';
 import { IoMdRadioButtonOn } from 'react-icons/io';
 import { useSelector, useDispatch } from 'react-redux';
-import { setCancelBooking, setRemoveBooking, setBookingColor } from '../redux/action/bookingAction';
+import { setCancelBooking, setRemoveBooking, setBookingColor, setBooking } from '../redux/action/bookingAction';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { setDriverInfo } from '../redux/action/driverBookingAction';
 
 const PaymentInfo = () => {
     const dispatch = useDispatch();
@@ -13,13 +14,52 @@ const PaymentInfo = () => {
     const distance = useSelector((state) => state?.booking?.distance);
     const transportVehical = useSelector((state) => state?.transport?.transportDetail);
     const cancelInfo = useSelector((state) => state?.booking?.cancelInfo);
+    const riderInfo = useSelector((state) => state?.driver?.driverInfo);
     const [response, setResponse] = useState()
     const [isCancelPopupOpen, setIsCancelPopupOpen] = useState(false);
     const [isPaymentPopupOpen, setIsPaymentPopupOpen] = useState(false);
+    const [paymentAmount, setPaymentAmount] = useState(0);
     const navigate = useNavigate();
     const cancelStatus = cancelInfo?.data?.data?.status
     const panding = bookingInfo?.data?.status
     const count = transportVehical?.pr_KM_charge * distance;
+    localStorage.setItem('paymentAmount', JSON.stringify(count));
+    console.log(transportVehical?.pr_KM_charge , distance)
+    useEffect(() => {
+        const storedBooking = localStorage.getItem("bookingInfo");
+        const storedRider = localStorage.getItem("riderInfo");
+
+        if (!bookingInfo && storedBooking) {
+            dispatch(setBooking(JSON.parse(storedBooking))
+            );
+        }
+
+        if (storedRider) {
+            dispatch(setDriverInfo(JSON.parse(storedRider)))
+        }
+    }, [bookingInfo, dispatch]);
+
+
+    useEffect(() => {
+        if (bookingInfo) {
+            localStorage.setItem("bookingInfo", JSON.stringify(bookingInfo));
+        }
+    }, [bookingInfo]);
+
+    useEffect(() => {
+        if (riderInfo) {
+            localStorage.setItem("riderInfo", JSON.stringify(riderInfo));
+        }
+    }, [riderInfo]);
+
+    useEffect(() => {
+        const storedPayment = JSON.parse(localStorage.getItem('paymentAmount'));
+        if (storedPayment) {
+            setPaymentAmount(storedPayment);
+        }
+    }, []);
+
+
     const handleCancelBooking = async () => {
         try {
             const bookingId = bookingInfo?.data?._id;
@@ -102,6 +142,10 @@ const PaymentInfo = () => {
     const handleOkClick = () => {
         setIsCancelPopupOpen(false);
         dispatch(setRemoveBooking(null))
+        localStorage.removeItem('bookingInfo');
+        localStorage.removeItem('distance');
+        localStorage.removeItem('paymentAmount');
+        localStorage.removeItem('riderInfo');
         navigate('/hero');
     };
 
@@ -113,7 +157,7 @@ const PaymentInfo = () => {
                     <p className="text-sm text-gray-500">31 Mar 2025, 11:29 AM </p>
                     <p className="text-xs text-gray-400">CRN1486190281</p>
                 </div>
-                <p className="text-lg font-semibold">₹ {count}</p>
+                <p className="text-lg font-semibold">₹ {count || paymentAmount}</p>
             </div>
 
             <div className="py-4 border-b">
@@ -140,7 +184,7 @@ const PaymentInfo = () => {
                 <p className="text-gray-400 font-semibold mb-2">Fare details</p>
                 <div className="flex justify-between text-sm py-1">
                     <p>Trip Fare</p>
-                    <p>₹ 376.19</p>
+                    <p>₹ {bookingInfo?.data.paymentStatus}</p>
                 </div>
                 <div className="flex justify-between text-sm py-1">
                     <p className="text-green-600">Coupon discount</p>
@@ -216,6 +260,10 @@ const PaymentInfo = () => {
                         <button
                             onClick={() => {
                                 setIsPaymentPopupOpen(false);
+                                localStorage.removeItem('bookingInfo');
+                                localStorage.removeItem('distance');
+                                localStorage.removeItem('paymentAmount');
+                                localStorage.removeItem('riderInfo');
                                 navigate('/hero'); // Or to a confirmation page
                             }}
                             className="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600"

@@ -1,8 +1,8 @@
 import { BOOKING, DISTANCE, CANCEL_BOOKING, REMOVE_BOOKING, BOOKING_COLOR } from '../action/bookingAction';
 
 const initialState = {
-    bookingInfo: null,
-    distance: 0,
+    bookingInfo: JSON.parse(localStorage.getItem("bookingInfo")) || null,
+    distance: JSON.parse(localStorage.getItem("distance")) || 0,
     cancelBooking: null,
     iscancelBooking: false,
     isprocedPayment: false,
@@ -16,9 +16,14 @@ const bookingReducer = (state = initialState, action) => {
             return {
                 ...state,
                 bookingInfo: action.payload.bookingInfo,
+                iscancelBooking: false,
+        isprocedPayment: false,
+        isDefaultColor: true
+
             };
 
         case DISTANCE:
+            console.log(action.payload)
             return {
                 ...state,
                 distance: action.payload.distance,
@@ -37,6 +42,7 @@ const bookingReducer = (state = initialState, action) => {
             };
 
         case BOOKING_COLOR:
+            console.log(action.payload)
             return {
                 ...state,
                 iscancelBooking: action.payload.iscancelBooking,

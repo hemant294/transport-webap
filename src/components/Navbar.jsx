@@ -60,9 +60,9 @@ const Navbar = () => {
                         <Link to={success ? '/hero': '/'} className="flex items-center text-gray-600 hover:text-gray-900">
                             <MdOutlineHome size={16} className="mr-1" /> Home
                         </Link>
-                        <a href="#" className="flex items-center text-gray-600 hover:text-gray-900">
+                        <Link to="/about" className="flex items-center text-gray-600 hover:text-gray-900">
                             <MdPermDeviceInformation size={16} className="mr-1" /> About
-                        </a>
+                        </Link>
                         <Link to='/contact' className="flex items-center text-gray-600 hover:text-gray-900">
                             <MdOutlineEmail size={16} className="mr-1" /> Contact Us
                         </Link>
@@ -114,9 +114,9 @@ const Navbar = () => {
                             <Link to={success ? '/hero': '/'} className="flex items-center text-gray-600 hover:text-gray-900 px-2 py-2 rounded hover:bg-gray-100">
                                 <MdOutlineHome size={16} className="mr-2" /> Home
                             </Link>
-                            <a href="#" className="flex items-center text-gray-600 hover:text-gray-900 px-2 py-2 rounded hover:bg-gray-100">
+                            <Link to="/about" className="flex items-center text-gray-600 hover:text-gray-900 px-2 py-2 rounded hover:bg-gray-100">
                                 <MdPermDeviceInformation size={16} className="mr-2" /> About
-                            </a>
+                            </Link>
                             <Link to='/contact' className="flex items-center text-gray-600 hover:text-gray-900 px-2 py-2 rounded hover:bg-gray-100">
                                 <MdOutlineEmail size={16} className="mr-2" /> Contact Us
                             </Link>

@@ -1,7 +1,7 @@
 import { DRIVER_INFO } from '../action/driverBookingAction';
 
 const initialState = {
-    driverInfo: null,
+    driverInfo: JSON.parse(localStorage.getItem("riderInfo")) || null,
 };
 
 const driverBookingReducer = (state = initialState, action) => {
