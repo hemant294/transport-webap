@@ -1,5 +1,7 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
 import Layout from '../Layout/Layout';
 import SignupForm from '../components/SignupForm';
 import SigninForm from '../components/SigninForm';
@@ -10,40 +12,27 @@ import PaymentPage from '../pages/PaymentPage';
 import ContactUs from '../pages/ContactUs';
 import NotFoundPage from '../pages/NotFoundPage';
 import About from '../pages/About';
-import ProtectedRoute from '../components/ProtectedRoute'; // <-- import
-
-import { useSelector } from 'react-redux';
 
 const ProjectRoutes = () => {
-    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const user = useSelector((state) => state.auth.user);
 
     return (
         <Router>
             <Routes>
-                <Route path='/' element={<Layout />}>
-                    {/* Redirect "/" based on auth */}
-                    <Route index element={isAuthenticated ? <Navigate to="/hero" /> : <SigninForm />} />
+                {/* Public Routes */}
+                <Route path="/" element={user ? <Navigate to="/hero" /> : <SigninForm />} />
+                <Route path="/signup" element={<SignupForm />} />
+                <Route path="/signin" element={<SigninForm />} />
 
-                    <Route path='/signup' element={<SignupForm />} />
-                    <Route path='/signin' element={<SigninForm />} />
-                    <Route path='/about' element={<About />} />
-                    <Route path='/contact' element={<ContactUs />} />
-
-                    {/* Protected Routes */}
-                    <Route path='/hero' element={
-                        <ProtectedRoute><Hero /></ProtectedRoute>
-                    } />
-                    <Route path='/booking/:title' element={
-                        <ProtectedRoute><BookingPage /></ProtectedRoute>
-                    } />
-                    <Route path='/driverinfo' element={
-                        <ProtectedRoute><Driver /></ProtectedRoute>
-                    } />
-                    <Route path='/payment' element={
-                        <ProtectedRoute><PaymentPage /></ProtectedRoute>
-                    } />
-
-                    <Route path='*' element={<NotFoundPage />} />
+                {/* Protected Routes (inside Layout) */}
+                <Route path="/" element={<Layout />}>
+                    <Route path="about" element={<About />} />
+                    <Route path="contact" element={<ContactUs />} />
+                    <Route path="hero" element={<Hero />} />
+                    <Route path="booking/:title" element={<BookingPage />} />
+                    <Route path="driverinfo" element={<Driver />} />
+                    <Route path="payment" element={<PaymentPage />} />
+                    <Route path="*" element={<NotFoundPage />} />
                 </Route>
             </Routes>
         </Router>

@@ -127,8 +127,8 @@ const BookingPage = () => {
             onClick={handleBookRide}
             disabled={isBooking || !pickupLocation || !dropoffLocation || !distance}
             className={`w-full py-3 text-white font-semibold rounded-md transition-all duration-300 ${isBooking || !pickupLocation || !dropoffLocation || !distance
-                ? 'bg-blue-300 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700'
+              ? 'bg-blue-300 cursor-not-allowed'
+              : 'bg-blue-600 hover:bg-blue-700'
               }`}
           >
             {isBooking ? 'Booking...' : 'Book Now'}
