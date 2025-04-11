@@ -2,9 +2,16 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { Outlet } from 'react-router-dom';
+import { Outlet, Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Layout = () => {
+    const user = useSelector((state) => state.auth.user);
+
+    if (!user) {
+        return <Navigate to="/signin" replace />
+    }
+
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar />

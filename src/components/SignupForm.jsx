@@ -38,6 +38,7 @@ const SignupForm = () => {
 
 
     return (
+        <div className="min-h-screen grid content-center">
         <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
             <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Create an Account</h2>
 
@@ -155,6 +156,7 @@ const SignupForm = () => {
                     <a href="/signin" className="text-blue-500 hover:text-blue-700">Sign In</a>
                 </p>
             </div>
+        </div>
         </div>
     );
 };
