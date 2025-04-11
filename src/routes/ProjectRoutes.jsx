@@ -28,7 +28,7 @@ const ProjectRoutes = () => {
                     <Route path='/signup' element={<SignupForm />} />
                     <Route path='/signin' element={<SigninForm />} />
                     <Route path='/hero' element={<Hero />}/>
-                    <Route path="/booking/:id" element={<BookingPage />} />
+                    <Route path="/booking/:title" element={<BookingPage />} />
                     <Route path='/driverinfo' element={<Driver />}/>
                     <Route path='/payment' element={<PaymentPage />}/>
                     <Route path='/contact' element={<ContactUs />}/>

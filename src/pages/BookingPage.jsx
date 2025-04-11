@@ -1,112 +1,163 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import bgImg from '../assets/ThanitJuly_42.jpg'; // Make sure this path is correct
+import { useSelector, useDispatch } from 'react-redux';
+import { setDriverInfo } from '../redux/action/driverBookingAction';
+import driverImg from "../assets/driverImg.webp"
+import { setBooking, setDistances } from '../redux/action/bookingAction';
 
-function BookingPage() {
+const BookingPage = () => {
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [pickupLocation, setPickupLocation] = useState('');
   const [dropoffLocation, setDropoffLocation] = useState('');
+  const [distance, setDistance] = useState('');
   const [isBooking, setIsBooking] = useState(false);
   const [isRideBooked, setIsRideBooked] = useState(false);
   const [riderInfo, setRiderInfo] = useState(null);
+  const [result, setResult] = useState([])
+  const vehicleDetails = useSelector((state) => state?.transport?.transportDetail);
+  const userInfo = useSelector((state) => state?.auth?.user);
+  const token = useSelector((state) => state?.auth?.token);
+  const handleBookRide = async () => {
+    if (!pickupLocation || !dropoffLocation || !distance) return;
 
-  const handleBookRide = () => {
     setIsBooking(true);
 
-    // Simulate fetching nearby riders and booking a ride (replace with actual API call)
-    setTimeout(() => {
-      setIsBooking(false);
-      setIsRideBooked(true);
-      setRiderInfo({
-        name: 'Rajesh Kumar',
-        image: 'https://via.placeholder.com/150', // Replace with actual image URL
-        email: 'rajesh.kumar@example.com',
-        phone: '+91 9876543210',
-        rating: 4.8,
-        vehicleNumber: 'MP 09 AB 1234',
-        reviews: [
-          { id: 1, text: 'Great driver, arrived on time.' },
-          { id: 2, text: 'Smooth and comfortable ride.' },
-        ],
+    const payload = {
+      fullName: `${userInfo.user.name}`,
+      email: `${userInfo.user.email}`,
+      mobileNumber: `${userInfo.user.phone}`,
+      pickupLocation: pickupLocation,
+      dropLocation: dropoffLocation,
+      vehicleType: vehicleDetails?.title || "Three Wheeler",
+      bookingDate: new Date().toISOString().split("T")[0], // today
+    };
+
+    try {
+      const response = await fetch('http://localhost:5000/api/bookings/create', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
       });
-    }, 2000); // Simulate booking process (2 seconds)
+
+      const result = await response.json();
+      setResult(result)
+      if (response.ok) {
+        setRiderInfo({
+          name: 'Rajesh Kumar',
+          image: driverImg,
+          email: 'rajesh.kumar@example.com',
+          phone: '+91 9876543210',
+          rating: 4.8,
+          vehicleNumber: 'MP 09 AB 1234',
+          reviews: [
+            { id: 1, text: 'Great driver, arrived on time.' },
+            { id: 2, text: 'Smooth and comfortable ride.' },
+          ],
+        });
+        setIsRideBooked(true);
+      } else {
+        console.error('Booking failed:', result.message || result);
+        alert('Booking failed!');
+      }
+    } catch (error) {
+      console.error('Error booking:', error);
+      alert('Something went wrong while booking.');
+    } finally {
+      setIsBooking(false);
+    }
   };
 
   const handleClosePopup = () => {
     setIsRideBooked(false);
+    dispatch(setDriverInfo(riderInfo))
+    dispatch(setBooking(result))
+    dispatch(setDistances(Number(distance)))
+    navigate('/driverinfo');
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
-      <div className="relative py-3 sm:max-w-xl sm:mx-auto">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-300 to-blue-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
-        <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
-          <div className="max-w-md mx-auto">
-            <div>
-              <h1 className="text-2xl font-semibold text-gray-700">Transport your luggage</h1>
-            </div>
-            <div className="mt-6">
-              <div className="mb-4">
-                <label htmlFor="pickup" className="block text-gray-700 text-sm font-bold mb-2">
-                  Pickup Location
-                </label>
-                <input
-                  type="text"
-                  id="pickup"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  placeholder="Enter pickup location"
-                  value={pickupLocation}
-                  onChange={(e) => setPickupLocation(e.target.value)}
-                />
-              </div>
-              <div className="mb-6">
-                <label htmlFor="dropoff" className="block text-gray-700 text-sm font-bold mb-2">
-                  Drop-off Location
-                </label>
-                <input
-                  type="text"
-                  id="dropoff"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  placeholder="Enter drop-off location"
-                  value={dropoffLocation}
-                  onChange={(e) => setDropoffLocation(e.target.value)}
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <button
-                  className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${
-                    isBooking ? 'cursor-not-allowed opacity-50' : ''
-                  }`}
-                  type="button"
-                  onClick={handleBookRide}
-                  disabled={isBooking || !pickupLocation || !dropoffLocation}
-                >
-                  {isBooking ? 'Booking...' : 'Book Now'}
-                </button>
-              </div>
-            </div>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="w-full max-w-6xl bg-white shadow-2xl rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
+
+        {/* Left Form Section */}
+        <div className="p-10 flex flex-col justify-center">
+          <h1 className="text-3xl font-bold text-blue-700 mb-2">Book {vehicleDetails?.title} Ride</h1>
+          <p className="text-1xl font-bold text-blue-700 mb-6">Capacity of vehicle is {vehicleDetails?.capacity}</p>
+          <label className="text-sm font-semibold text-gray-700 mb-1" htmlFor="pickup">Pickup Location<span className="text-red-500"> *</span></label>
+          <input
+            id="pickup"
+            type="text"
+            required
+            className="mb-4 border rounded-md px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter pickup location"
+            value={pickupLocation}
+            onChange={(e) => setPickupLocation(e.target.value)}
+          />
+
+          <label className="text-sm font-semibold text-gray-700 mb-1" htmlFor="dropoff">Drop-off Location<span className="text-red-500"> *</span></label>
+          <input
+            id="dropoff"
+            type="text"
+            required
+            className="mb-4 border rounded-md px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter drop-off location"
+            value={dropoffLocation}
+            onChange={(e) => setDropoffLocation(e.target.value)}
+          />
+
+          <label className="text-sm font-semibold text-gray-700 mb-1" htmlFor="distance">Distance (in km)<span className="text-red-500"> *</span></label>
+          <input
+            id="distance"
+            type="number"
+            required
+            className="mb-6 border rounded-md px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="e.g. 10"
+            value={distance}
+            onChange={(e) => setDistance(e.target.value)}
+            min={1}
+          />
+
+          <button
+            onClick={handleBookRide}
+            disabled={isBooking || !pickupLocation || !dropoffLocation || !distance}
+            className={`w-full py-3 text-white font-semibold rounded-md transition-all duration-300 ${isBooking || !pickupLocation || !dropoffLocation || !distance
+                ? 'bg-blue-300 cursor-not-allowed'
+                : 'bg-blue-600 hover:bg-blue-700'
+              }`}
+          >
+            {isBooking ? 'Booking...' : 'Book Now'}
+          </button>
+        </div>
+
+        {/* Right Visual Section */}
+        <div className="relative bg-cover bg-center hidden md:block" style={{ backgroundImage: `url(${bgImg})` }}>
+          <div className="bg-black bg-opacity-50 w-full h-full flex flex-col items-center justify-center text-white text-center p-8">
+            <h2 className="text-3xl font-bold mb-4">Fast. Reliable. Affordable.</h2>
+            <p className="text-lg">Transport your goods across the city with just a few clicks.</p>
           </div>
         </div>
       </div>
 
-      {/* Dummy Nearby Rider Booked Popup */}
+      {/* Ride Booked Popup */}
       {isRideBooked && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white rounded-lg shadow-xl p-6">
-            <h2 className="text-lg font-semibold text-gray-700 mb-4">Ride Booked!</h2>
-            <p className="text-gray-600 mb-4">We are finding a nearby rider for you.</p>
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-lg shadow-2xl p-6 max-w-sm w-full text-center animate-fade-in">
+            <h2 className="text-2xl font-bold text-green-600 mb-3">Ride Booked!</h2>
+            <p className="text-gray-700 mb-6">We are connecting you with a nearby rider.</p>
             <button
-              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-6 rounded-md"
               onClick={handleClosePopup}
             >
-              Okay
+              Continue
             </button>
           </div>
         </div>
-      )}
-
-      {/* Rider Information Section */}
-      {riderInfo && (
-          navigate(`/driverinfo`)
       )}
     </div>
   );
