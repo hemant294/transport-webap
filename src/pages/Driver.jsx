@@ -6,17 +6,17 @@ const Driver = () => {
     const riderInfo = useSelector((state) => state?.driver?.driverInfo);
     const cancelInfo = useSelector((state) => state?.booking?.cancelInfo);
     const { iscancelBooking, isprocedPayment, isDefaultColor } = useSelector((state) => state.booking);
-    console.log(iscancelBooking, isprocedPayment, isDefaultColor)
+
     return (
         <div className="relative py-3 w-full mt-8 min-h-screen">
             <div className="relative py-3 sm:max-w-xl sm:mx-auto mt-8 ">
 
-            <div className={`absolute inset-0 
-    ${iscancelBooking ? 'bg-red-400' 
-    : isprocedPayment ? 'bg-green-400' 
-    : 'bg-gradient-to-r from-sky-300 to-sky-600'} 
+                <div className={`absolute inset-0 
+    ${iscancelBooking ? 'bg-red-400'
+                        : isprocedPayment ? 'bg-green-400'
+                            : 'bg-gradient-to-r from-sky-300 to-sky-600'} 
     shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl`}>
-</div>
+                </div>
                 <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
                     <div className="max-w-md mx-auto">
                         <div>
@@ -47,7 +47,7 @@ const Driver = () => {
                             )}
                         </div>
                     </div>
-                <PaymentInfo />
+                    <PaymentInfo />
                 </div>
             </div>
         </div>

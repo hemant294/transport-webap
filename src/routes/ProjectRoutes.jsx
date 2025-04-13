@@ -12,6 +12,10 @@ import PaymentPage from '../pages/PaymentPage';
 import ContactUs from '../pages/ContactUs';
 import NotFoundPage from '../pages/NotFoundPage';
 import About from '../pages/About';
+import User from '../admin/User';
+import AdminBookings from '../admin/AdminBookings';
+import AdminContact from '../admin/AdminContact';
+import LayoutAdmin from '../Layout/LayoutAdmin';
 
 const ProjectRoutes = () => {
     const user = useSelector((state) => state.auth.user);
@@ -20,7 +24,22 @@ const ProjectRoutes = () => {
         <Router>
             <Routes>
                 {/* Public Routes */}
-                <Route path="/" element={user ? <Navigate to="/hero" /> : <SigninForm />} />
+                <Route
+                    path="/"
+                    element={
+                        user ? (
+                            user?.user?.role === "user" ? (
+                                <Navigate to="/hero" />
+                            ) : user?.user?.role === "admin" ? (
+                                <Navigate to="/allUsers" />
+                            ) : (
+                                <SigninForm />
+                            )
+                        ) : (
+                            <SigninForm />
+                        )
+                    }
+                />
                 <Route path="/signup" element={<SignupForm />} />
                 <Route path="/signin" element={<SigninForm />} />
 
@@ -33,6 +52,13 @@ const ProjectRoutes = () => {
                     <Route path="driverinfo" element={<Driver />} />
                     <Route path="payment" element={<PaymentPage />} />
                     <Route path="*" element={<NotFoundPage />} />
+
+                </Route>
+
+                <Route path="/" element={<LayoutAdmin />}>
+                    <Route path="allUsers" element={<User />} />
+                    <Route path="allBookings" element={<AdminBookings />} />
+                    <Route path="allContact" element={<AdminContact />} />
                 </Route>
             </Routes>
         </Router>

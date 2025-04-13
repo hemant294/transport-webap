@@ -13,6 +13,7 @@ import { setBooking, setDistances } from '../redux/action/bookingAction';
 import { setDriverInfo } from '../redux/action/driverBookingAction';
 import { useNavigate } from 'react-router-dom';
 import { setVehicle } from '../redux/action/transportAction';
+import { bookingPost } from '../api/PostApi/postApi';
 
 const Hero = () => {
     const dispatch = useDispatch()
@@ -103,14 +104,7 @@ const Hero = () => {
         };
 
         try {
-            const response = await fetch('http://localhost:5000/api/bookings/create', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload),
-            });
+            const response = await bookingPost(token, payload)
 
             const result = await response.json();
             setResult(result)

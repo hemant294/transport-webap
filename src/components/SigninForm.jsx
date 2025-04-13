@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../redux/action/authActions';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { loginPost } from '../api/PostApi/postApi';
+import { loginGet } from '../api/GetApi/getApi';
 
 const SigninForm = () => {
   const dispatch = useDispatch();
@@ -27,35 +29,29 @@ const SigninForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
-        email: formData.email,
-        password: formData.password
-      });
-
+      const response = await loginPost(formData); // ✅ Await this call
+  
       const token = response.data.token;
       localStorage.setItem('token', token);
-
-      const userRes = await axios.get('http://localhost:5000/api/auth/me', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
+  
+      const userRes = await loginGet(token); // ✅ Await this call too
+  
       const userData = userRes.data;
       localStorage.setItem('user', JSON.stringify(userData)); // Save user
-
+  
       // ✅ Dispatch to Redux
       dispatch(setUser(userData, token));
-
+  
       // ✅ Navigate
       navigate('/hero');
-
+  
     } catch (error) {
       console.error('Login error:', error.response?.data || error.message);
     }
   };
+  
 
   return (
     <div className="min-h-screen grid content-center">
@@ -149,7 +145,7 @@ const SigninForm = () => {
       <div className="mt-4 text-center">
         <p className="text-sm text-gray-600">
           Don't have an account?{' '}
-          <a href="/signup" className="text-blue-500 hover:text-blue-700">Sign Up</a>
+          <Link to="/signup" className="text-blue-500 hover:text-blue-700">Sign Up</Link>
         </p>
       </div>
     </div>

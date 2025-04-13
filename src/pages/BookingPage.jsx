@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setDriverInfo } from '../redux/action/driverBookingAction';
 import driverImg from "../assets/driverImg.webp"
 import { setBooking, setDistances } from '../redux/action/bookingAction';
+import { bookingPost } from '../api/PostApi/postApi';
 
 const BookingPage = () => {
 
@@ -36,14 +37,7 @@ const BookingPage = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:5000/api/bookings/create', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
+      const response = await bookingPost(token, payload)
 
       const result = await response.json();
       setResult(result)

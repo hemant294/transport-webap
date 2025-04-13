@@ -3,7 +3,9 @@ import React, { useState } from 'react';
 import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { MdLocalPhone } from "react-icons/md";
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
+import { signUpPost } from '../api/PostApi/postApi';
 const SignupForm = () => {
     const [formData, setFormData] = useState({
         name: '',
@@ -26,8 +28,7 @@ const SignupForm = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:5000/api/auth/signup', formData);
-
+            const response = signUpPost(formData);
             console.log('Signup successful:', response.data);
             // You can redirect or show a success message here
         } catch (error) {
@@ -36,127 +37,126 @@ const SignupForm = () => {
         }
     };
 
-
     return (
         <div className="min-h-screen grid content-center">
-        <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Create an Account</h2>
+            <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+                <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Create an Account</h2>
 
-            <form onSubmit={handleSubmit}>
-                {/* Name Field */}
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                        Full Name
-                    </label>
-                    <div className="relative">
-                        <span className="absolute left-3 top-3 text-gray-400">
-                            <FaUser />
-                        </span>
-                        <input
-                            className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            id="name"
-                            name="name"
-                            type="text"
-                            placeholder="John Doe"
-                            value={formData.name}
-                            onChange={handleChange}
-                            required
-                        />
+                <form onSubmit={handleSubmit}>
+                    {/* Name Field */}
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+                            Full Name
+                        </label>
+                        <div className="relative">
+                            <span className="absolute left-3 top-3 text-gray-400">
+                                <FaUser />
+                            </span>
+                            <input
+                                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                id="name"
+                                name="name"
+                                type="text"
+                                placeholder="John Doe"
+                                value={formData.name}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
                     </div>
-                </div>
 
-                {/* Email Field */}
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                        Email Address
-                    </label>
-                    <div className="relative">
-                        <span className="absolute left-3 top-3 text-gray-400">
-                            <FaEnvelope />
-                        </span>
-                        <input
-                            className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            id="email"
-                            name="email"
-                            type="email"
-                            placeholder="johndoe@example.com"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                        />
+                    {/* Email Field */}
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+                            Email Address
+                        </label>
+                        <div className="relative">
+                            <span className="absolute left-3 top-3 text-gray-400">
+                                <FaEnvelope />
+                            </span>
+                            <input
+                                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                id="email"
+                                name="email"
+                                type="email"
+                                placeholder="johndoe@example.com"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
                     </div>
-                </div>
 
-                {/* Password Field */}
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-                        Password
-                    </label>
-                    <div className="relative">
-                        <span className="absolute left-3 top-3 text-gray-400">
-                            <FaLock />
-                        </span>
-                        <input
-                            className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            id="password"
-                            name="password"
-                            type={showPassword ? "text" : "password"}
-                            placeholder="••••••••"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                            minLength="8"
-                        />
-                        <button
-                            type="button"
-                            className="absolute right-3 top-3 text-gray-400"
-                            onClick={() => setShowPassword(!showPassword)}
-                        >
-                            {showPassword ? <FaEyeSlash /> : <FaEye />}
-                        </button>
+                    {/* Password Field */}
+                    <div className="mb-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+                            Password
+                        </label>
+                        <div className="relative">
+                            <span className="absolute left-3 top-3 text-gray-400">
+                                <FaLock />
+                            </span>
+                            <input
+                                className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                id="password"
+                                name="password"
+                                type={showPassword ? "text" : "password"}
+                                placeholder="••••••••"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                                minLength="8"
+                            />
+                            <button
+                                type="button"
+                                className="absolute right-3 top-3 text-gray-400"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                            </button>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">Password must be at least 8 characters long</p>
                     </div>
-                    <p className="text-xs text-gray-500 mt-1">Password must be at least 8 characters long</p>
-                </div>
 
-                {/* Confirm Password Field */}
-                <div className="mb-6">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phone">
-                        Phone Number
-                    </label>
-                    <div className="relative">
-                        <span className="absolute left-3 top-3 text-gray-400">
-                            <MdLocalPhone />
-                        </span>
-                        <input
-                            className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            id="phone"
-                            name="phone"
-                            type="number"
-                            placeholder="Phone no..."
-                            value={formData.phone}
-                            onChange={handleChange}
-                            required
-                        />
+                    {/* Confirm Password Field */}
+                    <div className="mb-6">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phone">
+                            Phone Number
+                        </label>
+                        <div className="relative">
+                            <span className="absolute left-3 top-3 text-gray-400">
+                                <MdLocalPhone />
+                            </span>
+                            <input
+                                className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                id="phone"
+                                name="phone"
+                                type="number"
+                                placeholder="Phone no..."
+                                value={formData.phone}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
                     </div>
+
+                    {/* Submit Button */}
+                    <button
+                        type="submit"
+                        className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors"
+                    >
+                        Sign Up
+                    </button>
+                </form>
+
+                {/* Sign in link */}
+                <div className="mt-4 text-center">
+                    <p className="text-sm text-gray-600">
+                        Already have an account?{' '}
+                        <Link to="/signin" className="text-blue-500 hover:text-blue-700">Sign In</Link>
+                    </p>
                 </div>
-
-                {/* Submit Button */}
-                <button
-                    type="submit"
-                    className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors"
-                >
-                    Sign Up
-                </button>
-            </form>
-
-            {/* Sign in link */}
-            <div className="mt-4 text-center">
-                <p className="text-sm text-gray-600">
-                    Already have an account?{' '}
-                    <a href="/signin" className="text-blue-500 hover:text-blue-700">Sign In</a>
-                </p>
             </div>
-        </div>
         </div>
     );
 };

@@ -23,7 +23,6 @@ const bookingReducer = (state = initialState, action) => {
             };
 
         case DISTANCE:
-            console.log(action.payload)
             return {
                 ...state,
                 distance: action.payload.distance,
@@ -42,7 +41,6 @@ const bookingReducer = (state = initialState, action) => {
             };
 
         case BOOKING_COLOR:
-            console.log(action.payload)
             return {
                 ...state,
                 iscancelBooking: action.payload.iscancelBooking,

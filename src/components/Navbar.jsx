@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
-      const navigate = useNavigate();
+    const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -22,7 +22,6 @@ const Navbar = () => {
     const dispatch = useDispatch();
     const loggedInUser = useSelector((state) => state.auth.user);
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-
     const success = loggedInUser?.success
     useEffect(() => {
         const handleScroll = () => {
@@ -57,16 +56,31 @@ const Navbar = () => {
                     </div>
 
                     <nav className="hidden md:flex items-center space-x-6">
-                        <Link to={success ? '/hero': '/'} className="flex items-center text-gray-600 hover:text-gray-900">
-                            <MdOutlineHome size={16} className="mr-1" /> Home
-                        </Link>
-                        <Link to="/about" className="flex items-center text-gray-600 hover:text-gray-900">
-                            <MdPermDeviceInformation size={16} className="mr-1" /> About
-                        </Link>
-                        <Link to='/contact' className="flex items-center text-gray-600 hover:text-gray-900">
-                            <MdOutlineEmail size={16} className="mr-1" /> Contact Us
-                        </Link>
-
+                        {loggedInUser?.user?.role !== 'admin' ?
+                            <>
+                                <Link to={success ? '/hero' : '/'} className="flex items-center text-gray-600 hover:text-gray-900">
+                                    <MdOutlineHome size={16} className="mr-1" /> Home
+                                </Link>
+                                <Link to="/about" className="flex items-center text-gray-600 hover:text-gray-900">
+                                    <MdPermDeviceInformation size={16} className="mr-1" /> About
+                                </Link>
+                                <Link to='/contact' className="flex items-center text-gray-600 hover:text-gray-900">
+                                    <MdOutlineEmail size={16} className="mr-1" /> Contact Us
+                                </Link>
+                            </>
+                            :
+                            <>
+                                <Link to={success ? '/allUsers' : '/'} className="flex items-center text-gray-600 hover:text-gray-900">
+                                    <MdOutlineHome size={16} className="mr-1" />All Users
+                                </Link>
+                                <Link to="/allBookings" className="flex items-center text-gray-600 hover:text-gray-900">
+                                    <MdPermDeviceInformation size={16} className="mr-1" /> All Bookings
+                                </Link>
+                                <Link to='/allContact' className="flex items-center text-gray-600 hover:text-gray-900">
+                                    <MdOutlineEmail size={16} className="mr-1" /> All contact Info
+                                </Link>
+                            </>
+                        }
                         {success && (
                             <div className="relative ml-6" ref={dropdownRef}>
                                 <button
@@ -111,15 +125,30 @@ const Navbar = () => {
                 <div className="md:hidden bg-white shadow-md">
                     <div className="container mx-auto px-4 py-2">
                         <nav className="flex flex-col space-y-4 py-4">
-                            <Link to={success ? '/hero': '/'} className="flex items-center text-gray-600 hover:text-gray-900 px-2 py-2 rounded hover:bg-gray-100">
-                                <MdOutlineHome size={16} className="mr-2" /> Home
-                            </Link>
-                            <Link to="/about" className="flex items-center text-gray-600 hover:text-gray-900 px-2 py-2 rounded hover:bg-gray-100">
-                                <MdPermDeviceInformation size={16} className="mr-2" /> About
-                            </Link>
-                            <Link to='/contact' className="flex items-center text-gray-600 hover:text-gray-900 px-2 py-2 rounded hover:bg-gray-100">
-                                <MdOutlineEmail size={16} className="mr-2" /> Contact Us
-                            </Link>
+                            {loggedInUser?.user?.role !== 'admin' ?
+                                <>
+                                    <Link to={success ? '/hero' : '/'} className="flex items-center text-gray-600 hover:text-gray-900 px-2 py-2 rounded hover:bg-gray-100">
+                                        <MdOutlineHome size={16} className="mr-2" /> Home
+                                    </Link>
+                                    <Link to="/about" className="flex items-center text-gray-600 hover:text-gray-900 px-2 py-2 rounded hover:bg-gray-100">
+                                        <MdPermDeviceInformation size={16} className="mr-2" /> About
+                                    </Link>
+                                    <Link to='/contact' className="flex items-center text-gray-600 hover:text-gray-900 px-2 py-2 rounded hover:bg-gray-100">
+                                        <MdOutlineEmail size={16} className="mr-2" /> Contact Us
+                                    </Link>
+                                </> :
+                                <>
+                                    <Link to={success ? '/allUsers' : '/'} className="flex items-center text-gray-600 hover:text-gray-900 px-2 py-2 rounded hover:bg-gray-100">
+                                        <MdOutlineHome size={16} className="mr-2" /> All Users
+                                    </Link>
+                                    <Link to="/allBookings" className="flex items-center text-gray-600 hover:text-gray-900 px-2 py-2 rounded hover:bg-gray-100">
+                                        <MdPermDeviceInformation size={16} className="mr-2" /> All Bookings
+                                    </Link>
+                                    <Link to='/allContact' className="flex items-center text-gray-600 hover:text-gray-900 px-2 py-2 rounded hover:bg-gray-100">
+                                        <MdOutlineEmail size={16} className="mr-2" /> All contact Info
+                                    </Link>
+                                </>
+                            }
 
                             {success && (
                                 <div className="border-t pt-4">

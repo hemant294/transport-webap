@@ -24,7 +24,7 @@ const PaymentInfo = () => {
     const panding = bookingInfo?.data?.status
     const count = transportVehical?.pr_KM_charge * distance;
     localStorage.setItem('paymentAmount', JSON.stringify(count));
-    console.log(transportVehical?.pr_KM_charge , distance)
+
     useEffect(() => {
         const storedBooking = localStorage.getItem("bookingInfo");
         const storedRider = localStorage.getItem("riderInfo");
