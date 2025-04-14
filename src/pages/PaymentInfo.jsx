@@ -126,6 +126,8 @@ const PaymentInfo = () => {
                 }
             );
 
+            console.log(response)
+
             if (response.status === 200) {
                 dispatch(setBookingColor(false, true, false))
                 setIsPaymentPopupOpen(true)
@@ -249,7 +251,7 @@ const PaymentInfo = () => {
                             OK
                         </button>
                     </div>
-                </div>
+                </div>  
             )}
 
             {isPaymentPopupOpen && (

@@ -34,7 +34,6 @@ const AdminBookings = () => {
   }, [token]);
 
   console.log(allBookings)
-
   const formatDate = (dateString) => {
     if (!dateString) return "-";
     const date = new Date(dateString);
@@ -79,6 +78,7 @@ const AdminBookings = () => {
   const indexOfFirstBooking = indexOfLastBooking - bookingsPerPage;
   const currentBookings = sortedBookings.slice(indexOfFirstBooking, indexOfLastBooking);
   const totalPages = Math.ceil(sortedBookings.length / bookingsPerPage);
+  console.log(currentBookings)
 
   return (
     <div className="bg-gray-50 min-h-screen p-6">
@@ -157,11 +157,11 @@ const AdminBookings = () => {
                       {formatDate(booking?.createdAt)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-gray-500">
-                      ₹{booking?.amount?.toFixed(2) || "0.00"}
+                      ₹{booking?.bookingPayment?.toFixed(2) || "0.00"}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                        {booking?.status || "Pending"}
+                        {booking?.paymentStatus || "Pending"}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">

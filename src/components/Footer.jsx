@@ -31,10 +31,10 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
             <ul className="space-y-2">
               <li className="flex items-center text-gray-400">
-                <MdOutlineEmail size={16} className="mr-2" /> info@example.com
+                <MdOutlineEmail size={16} className="mr-2" /> vaibhavgautam112004@gmail.com
               </li>
               <li className="flex items-center text-gray-400">
-                <MdLocalPhone size={16} className="mr-2" /> +1 (123) 456-7890
+                <MdLocalPhone size={16} className="mr-2" /> +91 7986031014
               </li>
             </ul>
           </div>

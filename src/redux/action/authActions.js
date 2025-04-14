@@ -9,3 +9,4 @@ export const setUser = (user, token) => ({
 export const logoutUser = () => ({
   type: LOGOUT_USER
 });
+  

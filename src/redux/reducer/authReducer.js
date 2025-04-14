@@ -4,7 +4,7 @@ const savedToken = localStorage.getItem('token');
 const initialState = {
   user: savedUser ? JSON.parse(savedUser) : null,
   token: savedToken || null,
-  isAuthenticated: false,
+  isAuthenticated: savedUser && savedToken ? true : false,
 };
 
 const authReducer = (state = initialState, action) => {

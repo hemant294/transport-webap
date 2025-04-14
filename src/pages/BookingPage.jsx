@@ -18,9 +18,12 @@ const BookingPage = () => {
   const [isRideBooked, setIsRideBooked] = useState(false);
   const [riderInfo, setRiderInfo] = useState(null);
   const [result, setResult] = useState([])
+  const distances = useSelector((state) => state?.booking?.distance);
   const vehicleDetails = useSelector((state) => state?.transport?.transportDetail);
   const userInfo = useSelector((state) => state?.auth?.user);
   const token = useSelector((state) => state?.auth?.token);
+  const count = vehicleDetails?.pr_KM_charge * distances;
+
   const handleBookRide = async () => {
     if (!pickupLocation || !dropoffLocation || !distance) return;
 
@@ -34,12 +37,14 @@ const BookingPage = () => {
       dropLocation: dropoffLocation,
       vehicleType: vehicleDetails?.title || "Three Wheeler",
       bookingDate: new Date().toISOString().split("T")[0], // today
+      bookingPayment: count,
     };
 
     try {
       const response = await bookingPost(token, payload)
 
       const result = await response.json();
+      console.log(result)
       setResult(result)
       if (response.ok) {
         setRiderInfo({

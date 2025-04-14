@@ -101,7 +101,9 @@ const Hero = () => {
             dropLocation: destination,
             vehicleType: vehicle || "Three Wheeler",
             bookingDate: new Date().toISOString().split("T")[0], // today
+            bookingPayment: "800"
         };
+        console.log("Created Booking:", payload);
 
         try {
             const response = await bookingPost(token, payload)
