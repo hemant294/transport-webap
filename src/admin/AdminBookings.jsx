@@ -33,7 +33,6 @@ const AdminBookings = () => {
     fetchBookings();
   }, [token]);
 
-  console.log(allBookings)
   const formatDate = (dateString) => {
     if (!dateString) return "-";
     const date = new Date(dateString);
@@ -78,7 +77,6 @@ const AdminBookings = () => {
   const indexOfFirstBooking = indexOfLastBooking - bookingsPerPage;
   const currentBookings = sortedBookings.slice(indexOfFirstBooking, indexOfLastBooking);
   const totalPages = Math.ceil(sortedBookings.length / bookingsPerPage);
-  console.log(currentBookings)
 
   return (
     <div className="bg-gray-50 min-h-screen p-6">

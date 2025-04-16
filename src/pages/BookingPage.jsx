@@ -91,14 +91,13 @@ const BookingPage = () => {
       dropLocation: dropoffLocation,
       vehicleType: vehicleDetails?.title || "Three Wheeler",
       bookingDate: new Date().toISOString().split("T")[0], // today
-      bookingPayment: count,
+      bookingPayment: count || 0,
     };
 
     try {
       const response = await bookingPost(token, payload)
 
       const result = await response.json();
-      console.log(result)
       setResult(result)
       if (response.ok) {
         const randomIndex = Math.floor(Math.random() * ridersInfo.length);

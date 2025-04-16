@@ -28,7 +28,7 @@ const Hero = () => {
     const [pickup, setPickup] = useState('');
     const [distance, setDistance] = useState('');
     const [isBooking, setIsBooking] = useState(false);
-    const [vehicle, setVehicles] = useState('');
+    const [vehicles, setVehicles] = useState('');
     const [isAnimated, setIsAnimated] = useState(false);
     const userInfo = useSelector((state) => state?.auth?.user);
     const token = useSelector((state) => state?.auth?.token);
@@ -36,13 +36,11 @@ const Hero = () => {
     const [result, setResult] = useState([])
     const [riderInfo, setRiderInfo] = useState(null);
     const distances = useSelector((state) => state?.booking?.distance);
-    const vehicleDetails = useSelector((state) => state?.transport?.transportDetail);
-    const count = vehicleDetails?.pr_KM_charge * distances;
+    const vehicleDetails = useSelector((state) => state?.transport);
+    const count = vehicleDetails?.transportDetail?.pr_KM_charge * distances;
 
     useEffect(() => {
         setIsAnimated(true);
-        console.log(location.state?.loginSuccess)
-        console.log(location)
         if (location) {
             setShowAlert(true);
             const timer = setTimeout(() => {
@@ -157,10 +155,13 @@ const Hero = () => {
         },
     ];
 
+    const selectedVehicle = transportOption.find((item) => item.title === vehicles);
     const handleBookRide = async () => {
         if (!pickup || !destination || !distance) return;
-
+        dispatch(setDistances(Number(distance)))
+        dispatch(setVehicle(selectedVehicle))
         setIsBooking(true);
+        const prKmCharge = selectedVehicle?.pr_KM_charge || 0;
 
         const payload = {
             fullName: `${userInfo?.user?.name}`,
@@ -168,17 +169,17 @@ const Hero = () => {
             mobileNumber: `${userInfo?.user?.phone}`,
             pickupLocation: pickup,
             dropLocation: destination,
-            vehicleType: vehicle || "Three Wheeler",
+            vehicleType: vehicles || "Three Wheeler",
             bookingDate: new Date().toISOString().split("T")[0], // today
-            bookingPayment: count
+            bookingPayment: prKmCharge * Number(distance)
         };
-        console.log("Created Booking:", payload);
 
         try {
             const response = await bookingPost(token, payload)
-
             const result = await response.json();
+
             setResult(result)
+
             if (response.ok) {
                 const randomIndex = Math.floor(Math.random() * ridersInfo.length);
                 const randomRider = ridersInfo[randomIndex];
@@ -197,15 +198,11 @@ const Hero = () => {
         }
     };
 
-    const selectedVehicle = transportOption.find((item) => item.title === vehicle);
-
 
     const handleClosePopup = () => {
         setIsRideBooked(false);
         dispatch(setDriverInfo(riderInfo))
-        dispatch(setVehicle(selectedVehicle))
         dispatch(setBooking(result))
-        dispatch(setDistances(Number(distance)))
         navigate('/driverinfo');
     };
 
@@ -263,7 +260,7 @@ const Hero = () => {
                                     <FaCar className="text-purple-600 mr-2" />
                                     <select
                                         className="w-full outline-none text-gray-700"
-                                        value={vehicle}
+                                        value={vehicles}
                                         onChange={(e) => setVehicles(e.target.value)}
                                     >
                                         {transportOption.map((item) => (
