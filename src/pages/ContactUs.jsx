@@ -5,6 +5,7 @@ function ContactUs() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     message: '',
   });
   const [successMsg, setSuccessMsg] = useState('');
@@ -28,7 +29,7 @@ function ContactUs() {
     try {
       const response = await axios.post('http://localhost:5000/api/contact/submit', formData);
       setSuccessMsg('Message sent successfully!');
-      setFormData({ name: '', email: '', message: '' });
+      setFormData({ name: '', email: '', phone: '', message: '' });
     } catch (error) {
       setErrorMsg('Something went wrong. Please try again later.');
       console.error('Contact error:', error.response?.data || error.message);
@@ -77,6 +78,18 @@ function ContactUs() {
             />
           </div>
 
+          <div className="mb-4">
+            <input
+              type="phone"
+              name="phone"
+              placeholder="Enter your mobile number"
+              value={formData.phone}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+
           <div className="mb-6">
             <textarea
               name="message"
@@ -93,7 +106,7 @@ function ContactUs() {
             type="submit"
             disabled={isSubmitting}
             className={`w-full ${
-              isSubmitting ? 'bg-purple-400 cursor-not-allowed' : 'bg-purple-700 hover:bg-purple-800'
+              isSubmitting ? 'bg-blue-400  cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-800 '
             } text-white font-medium py-2 px-4 rounded-md transition duration-200`}
           >
             {isSubmitting ? 'Sending...' : 'Send Now'}

@@ -16,6 +16,7 @@ import About from '../pages/About';
 import User from '../admin/User';
 import AdminBookings from '../admin/AdminBookings';
 import AdminContact from '../admin/AdminContact';
+import Service from '../pages/Service';
 
 const PrivateRoute = ({ allowedRoles }) => {
   const user = useSelector((state) => state.auth.user);
@@ -69,6 +70,7 @@ const ProjectRoutes = () => {
             <Route path="/hero" element={<Hero />} />
             <Route path="/booking/:title" element={<BookingPage />} />
             <Route path="/driverinfo" element={<Driver />} />
+            <Route path="/service" element={<Service />} />
             <Route path="/payment" element={<PaymentPage />} />
           </Route>
         </Route>

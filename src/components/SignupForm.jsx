@@ -13,6 +13,8 @@ const SignupForm = () => {
         password: '',
         phone: ''
     });
+    const [isError, setIsError] = useState(false)
+    const [isSuccessSignUp, setIsSuccessSignUp] = useState(false)
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -29,9 +31,11 @@ const SignupForm = () => {
 
         try {
             const response = signUpPost(formData);
+            setIsSuccessSignUp(true)
             console.log('Signup successful:', response.data);
             // You can redirect or show a success message here
         } catch (error) {
+            setIsError(true)
             console.error('Signup error:', error.response?.data || error.message);
             // You can show an error message to the user here
         }
@@ -41,7 +45,9 @@ const SignupForm = () => {
         <div className="min-h-screen grid content-center">
             <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Create an Account</h2>
-
+                <h4 className={`text-1xl font-bold text-center text-gray-800 mb-2 ${isError && "text-red-400"} ${isSuccessSignUp && "text-green-400"}`}>
+          {isError ? "User allready exist" : isSuccessSignUp ? "SignUp successful" : ""}
+        </h4>
                 <form onSubmit={handleSubmit}>
                     {/* Name Field */}
                     <div className="mb-4">

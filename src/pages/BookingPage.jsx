@@ -6,6 +6,9 @@ import { setDriverInfo } from '../redux/action/driverBookingAction';
 import driverImg from "../assets/driverImg.webp"
 import { setBooking, setDistances } from '../redux/action/bookingAction';
 import { bookingPost } from '../api/PostApi/postApi';
+import driver2 from "../assets/driver2.jpeg";
+import driver3 from "../assets/driver3.jpeg";
+import driver4 from "../assets/driver4.jpeg";
 
 const BookingPage = () => {
 
@@ -29,6 +32,57 @@ const BookingPage = () => {
 
     setIsBooking(true);
 
+        const ridersInfo = [
+            {
+                name: 'Rajesh Kumar',
+                image: driverImg,
+                email: 'rajesh.kumar@gmail.com',
+                phone: '+91 9876543210',
+                rating: 4.5,
+                vehicleNumber: 'MP 09 AB 1234',
+                reviews: [
+                    { id: 1, text: 'Great driver, arrived on time.' },
+                    { id: 2, text: 'Smooth and comfortable ride.' },
+                ],
+            },
+            {
+                name: 'Mahesh Singh',
+                image: driver3,
+                email: 'mahehSingh21@gmail.com',
+                phone: '+91 7876465340',
+                rating: 4.0,
+                vehicleNumber: 'MP 09 AB 7434',
+                reviews: [
+                    { id: 1, text: 'Great driver, arrived on time.' },
+                    { id: 2, text: 'Smooth and comfortable ride.' },
+                ],
+            },
+            {
+                name: 'vijesh Parmar',
+                image: driver4,
+                email: 'vijesh.parmar@gmail.com',
+                phone: '+91 80876543210',
+                rating: 3.6,
+                vehicleNumber: 'MP 09 AB 2238',
+                reviews: [
+                    { id: 1, text: 'Great driver, arrived on time.' },
+                    { id: 2, text: 'Smooth and comfortable ride.' },
+                ],
+            },
+            {
+              name: 'vishal Makvana',
+              image: driver2,
+              email: 'vishal123@gmail.com',
+              phone: '+91 8887543210',
+              rating: 4.0,
+              vehicleNumber: 'MP 09 MB 2838',
+              reviews: [
+                  { id: 1, text: 'Great driver, arrived on time.' },
+                  { id: 2, text: 'Smooth and comfortable ride.' },
+              ],
+          }
+        ]
+
     const payload = {
       fullName: `${userInfo.user.name}`,
       email: `${userInfo.user.email}`,
@@ -47,18 +101,9 @@ const BookingPage = () => {
       console.log(result)
       setResult(result)
       if (response.ok) {
-        setRiderInfo({
-          name: 'Rajesh Kumar',
-          image: driverImg,
-          email: 'rajesh.kumar@example.com',
-          phone: '+91 9876543210',
-          rating: 4.8,
-          vehicleNumber: 'MP 09 AB 1234',
-          reviews: [
-            { id: 1, text: 'Great driver, arrived on time.' },
-            { id: 2, text: 'Smooth and comfortable ride.' },
-          ],
-        });
+        const randomIndex = Math.floor(Math.random() * ridersInfo.length);
+        const randomRider = ridersInfo[randomIndex];
+        setRiderInfo(randomRider);
         setIsRideBooked(true);
       } else {
         console.error('Booking failed:', result.message || result);

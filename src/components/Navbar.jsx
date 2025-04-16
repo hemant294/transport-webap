@@ -7,6 +7,7 @@ import {
     MdPermDeviceInformation,
     MdOutlineAccountCircle
 } from "react-icons/md";
+import { FaServicestack } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../redux/action/authActions';
 import { useNavigate } from 'react-router-dom';
@@ -66,6 +67,9 @@ const Navbar = () => {
                                 </Link>
                                 <Link to='/contact' className="flex items-center text-gray-600 hover:text-gray-900">
                                     <MdOutlineEmail size={16} className="mr-1" /> Contact Us
+                                </Link>
+                                <Link to='/service' className="flex items-center text-gray-600 hover:text-gray-900">
+                                    <FaServicestack size={16} className="mr-1" /> Services
                                 </Link>
                             </>
                             :
