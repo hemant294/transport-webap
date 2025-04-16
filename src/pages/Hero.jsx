@@ -17,11 +17,13 @@ import { bookingPost } from '../api/PostApi/postApi';
 import driver2 from "../assets/driver2.jpeg";
 import driver3 from "../assets/driver3.jpeg";
 import driver4 from "../assets/driver4.jpeg";
+import { useLocation } from 'react-router-dom';
 
 const Hero = () => {
+    const location = useLocation();
     const dispatch = useDispatch()
     const navigate = useNavigate();
-    const user = useSelector((state) => state.auth.user);
+    const [showAlert, setShowAlert] = useState(false);
     const [destination, setDestination] = useState('');
     const [pickup, setPickup] = useState('');
     const [distance, setDistance] = useState('');
@@ -33,10 +35,23 @@ const Hero = () => {
     const [isRideBooked, setIsRideBooked] = useState(false);
     const [result, setResult] = useState([])
     const [riderInfo, setRiderInfo] = useState(null);
+    const distances = useSelector((state) => state?.booking?.distance);
+    const vehicleDetails = useSelector((state) => state?.transport?.transportDetail);
+    const count = vehicleDetails?.pr_KM_charge * distances;
 
     useEffect(() => {
         setIsAnimated(true);
-    }, []);
+        console.log(location.state?.loginSuccess)
+        console.log(location)
+        if (location) {
+            setShowAlert(true);
+            const timer = setTimeout(() => {
+                setShowAlert(false);
+            }, 3000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [location.state]);
 
     const ridersInfo = [
         {
@@ -148,14 +163,14 @@ const Hero = () => {
         setIsBooking(true);
 
         const payload = {
-            fullName: `${userInfo.user.name}`,
-            email: `${userInfo.user.email}`,
-            mobileNumber: `${userInfo.user.phone}`,
+            fullName: `${userInfo?.user?.name}`,
+            email: `${userInfo?.user?.email}`,
+            mobileNumber: `${userInfo?.user?.phone}`,
             pickupLocation: pickup,
             dropLocation: destination,
             vehicleType: vehicle || "Three Wheeler",
             bookingDate: new Date().toISOString().split("T")[0], // today
-            bookingPayment: "800"
+            bookingPayment: count
         };
         console.log("Created Booking:", payload);
 
@@ -341,6 +356,12 @@ const Hero = () => {
                             Continue
                         </button>
                     </div>
+                </div>
+            )}
+
+            {showAlert && (
+                <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded shadow z-50 text-center">
+                    <h1>Login Successful!</h1>
                 </div>
             )}
 

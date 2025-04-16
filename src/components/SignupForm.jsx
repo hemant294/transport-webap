@@ -2,11 +2,11 @@
 import React, { useState } from 'react';
 import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { MdLocalPhone } from "react-icons/md";
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { signUpPost } from '../api/PostApi/postApi';
 const SignupForm = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -30,10 +30,9 @@ const SignupForm = () => {
         e.preventDefault();
 
         try {
-            const response = signUpPost(formData);
+            const response = await signUpPost(formData);
             setIsSuccessSignUp(true)
-            console.log('Signup successful:', response.data);
-            // You can redirect or show a success message here
+            navigate('/signin');
         } catch (error) {
             setIsError(true)
             console.error('Signup error:', error.response?.data || error.message);

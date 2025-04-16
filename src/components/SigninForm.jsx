@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../redux/action/authActions';
-import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { loginPost } from '../api/PostApi/postApi';
@@ -18,7 +17,6 @@ const SigninForm = () => {
   });
   const [isErrorMessage, setIsErrorMessage] = useState(false)
   const [isSuccessMessage, setIsSuccessMessage] = useState(false)
-
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
@@ -46,14 +44,11 @@ const SigninForm = () => {
       // ✅ Dispatch to Redux
       dispatch(setUser(userData, token));
       setIsSuccessMessage(true)
-
       // ✅ Navigate
       navigate('/hero');
 
     } catch (error) {
-      // console.log(error.response.data.message)
       setIsErrorMessage(true)
-      console.error('Login error:', error.response?.data || error.message);
     }
   };
 
@@ -119,7 +114,7 @@ const SigninForm = () => {
           </div>
 
           {/* Remember Me & Forgot Password */}
-          <div className="flex items-center justify-between mb-6">
+          {/* <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
               <input
                 id="rememberMe"
@@ -138,12 +133,12 @@ const SigninForm = () => {
                 Forgot your password?
               </a>
             </div>
-          </div>
+          </div> */}
 
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors"
+            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors mt-4"
           >
             Sign In
           </button>
@@ -156,6 +151,7 @@ const SigninForm = () => {
             <Link to="/signup" className="text-blue-500 hover:text-blue-700">Sign Up</Link>
           </p>
         </div>
+
       </div>
     </div>
   );
